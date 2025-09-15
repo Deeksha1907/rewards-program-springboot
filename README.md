@@ -83,4 +83,3 @@ INSERT INTO transaction (customer_id, amount, transaction_date) VALUES
 (2, 95.00,  '2025-08-25 19:30:00');
 
 
-**API available at**: http://localhost:8080/api/rewards
