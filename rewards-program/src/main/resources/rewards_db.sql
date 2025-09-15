@@ -28,17 +28,24 @@ INSERT INTO customer (first_name, last_name, email) VALUES
 ('John', 'Doe', 'john.doe@example.com'),
 ('Jane', 'Smith', 'jane.smith@example.com');
 
--- Insert Sample Transactions (last 3 months)
+-- Insert Sample Transactions (spread across 3 months)
+-- John Doe
 INSERT INTO transaction (customer_id, amount, transaction_date) VALUES
-(1, 120.00, '2025-06-15 10:30:00'),  -- John
-(1, 75.00,  '2025-07-05 12:15:00'),
-(1, 200.00, '2025-08-20 14:45:00'),
-(2, 50.00,  '2025-06-10 09:20:00'),  -- Jane
-(2, 130.00, '2025-07-18 17:00:00'),
-(2, 95.00,  '2025-08-25 19:30:00');
+(1, 120.00, '2025-06-15 10:30:00'),  -- June
+(1, 75.00,  '2025-07-05 12:15:00'),  -- July
+(1, 200.00, '2025-08-20 14:45:00');  -- August
 
+-- Jane Smith
+INSERT INTO transaction (customer_id, amount, transaction_date) VALUES
+(2, 50.00,  '2025-06-10 09:20:00'),  -- June
+(2, 130.00, '2025-07-18 17:00:00'),  -- July
+(2, 95.00,  '2025-08-25 19:30:00');  -- August
 
+-- Extra transactions to better demo monthly breakdown
+INSERT INTO transaction (customer_id, amount, transaction_date) VALUES
+(1, 180.00, '2025-06-25 11:00:00'),  -- Another June for John
+(2, 220.00, '2025-07-28 15:40:00');  -- Another July for Jane
 
 -- Show table content
-select * from customer;
-select * from transaction;
+SELECT * FROM customer;
+SELECT * FROM transaction;
