@@ -11,3 +11,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
                                                                 LocalDateTime start,
                                                                 LocalDateTime end);
 }
+
+
+//Custom method: fetch transactions for a customer between dates.
+
+//Repositories = Database access layer
