@@ -1,7 +1,10 @@
 # rewards-program-springboot
 
 ## Overview
-This project calculates reward points for retail customers based on their transactions.
+This project implements a simple rewards program REST API:
+- Calculate reward points per transaction
+- Get total points and transaction details in a date range
+- Get monthly breakdown (year/month/points)
 
 ## Conditions
 - 2 points for every dollar spent over $100 in each transaction.
@@ -20,7 +23,7 @@ This project calculates reward points for retail customers based on their transa
 
 **## Endpoints**
 
-### 1. Get Total Rewards for Customer
+### 1. Get Total Rewards for Customer+ transactions
 **GET** `/api/rewards/customer/{id}?start=YYYY-MM-DD&end=YYYY-MM-DD` 
 **Example:**
 **GET** `/api/rewards/customer/1?start=2025-06-01&end=2025-08-31`
@@ -31,22 +34,42 @@ This project calculates reward points for retail customers based on their transa
   "customerName": "John Doe",
   "email": "john.doe@example.com",
   "totalPoints": 360,
-  "period": "2025-06-01 to 2025-08-31"
+  "period": "2025-06-01 to 2025-08-31",
+  "transactions": [
+    {
+      "amount": 120.00,
+      "transactionDate": "2025-06-15T10:30:00",
+      "pointsEarned": 90
+    }
+  ]
 }
 
-### 2. Get Monthly Rewards for Customer
+
+
+### 2. Get Monthly Rewards for Customer(year/month/points)
 **GET** `/api/rewards/customer/{id}/monthly?start=yyyy-MM-dd&end=yyyy-MM-dd`
 **Example:**
 **GET** `/api/rewards/customer/1/monthly?start=2025-06-01&end=2025-08-31`
 
 **Response:**
 
+[
+  { "year": 2025, "month": "June", "points": 120 },
+  { "year": 2025, "month": "July", "points": 30 }
+]
+
+**All error responses follow the shape:**
 {
-  "2025-JUNE": 120,
-  "2025-JULY": 90,
-  "2025-AUGUST": 150
+  "timestamp": "2025-09-13T12:45:30.123",
+  "error": "Invalid Date Format",
+  "message": "Invalid date format. Please use YYYY-MM-DD",
+  "status": 400
 }
 
+**Tests
+Run tests:**
+
+mvn test
 
 **Database Setup
 MySQL Setup**
@@ -83,7 +106,18 @@ INSERT INTO transaction (customer_id, amount, transaction_date) VALUES
 (2, 130.00, '2025-07-18 17:00:00'),
 (2, 95.00,  '2025-08-25 19:30:00');
 
+**Default connection properties (in application.properties):**
+spring.datasource.url=jdbc:mysql://localhost:3306/rewards_db
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+
+
+**Using packaged jar**
+java -jar target/rewards-program-0.0.1-SNAPSHOT.jar
+
  ## Run
+ using Maven (Development)
 mvn spring-boot:run
 
 ## Build
