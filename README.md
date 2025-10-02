@@ -17,9 +17,7 @@ This project calculates reward points for retail customers based on their transa
 - JUnit 5
 - Maven 3.8+
 
-  ### Build
-```bash
-mvn clean install
+ 
 
  ** ### Run**
 mvn spring-boot:run
