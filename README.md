@@ -11,13 +11,21 @@ This project calculates reward points for retail customers based on their transa
 ## Tech Stack
 - Java 21
 - Spring Boot 3.5.5
-- MySQL 
+- MySQL (running on localhost:3306)
 - JPA (Hibernate)
 - Lombok
 - JUnit 5
-- Maven
+- Maven 3.8+
 
-## Endpoints
+  ### Build
+```bash
+mvn clean install
+
+ ** ### Run**
+mvn spring-boot:run
+
+
+**## Endpoints**
 
 ### 1. Get Total Rewards for Customer
 **GET** `/api/rewards/customer/{id}?start=YYYY-MM-DD&end=YYYY-MM-DD` 
