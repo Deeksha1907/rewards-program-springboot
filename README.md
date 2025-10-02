@@ -24,6 +24,7 @@ mvn spring-boot:run
 ```bash
 mvn clean install
 
+
 **## Endpoints**
 
 ### 1. Get Total Rewards for Customer
