@@ -88,7 +88,7 @@ class RewardControllerTest {
         GlobalExceptionHandler handler = new GlobalExceptionHandler();
         DateTimeParseException ex = new DateTimeParseException("Failed to parse date", "abc", 0);
         var response = handler.handleDateParse(ex);
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(400, response.getStatusCode().value());
     }
 
     @Test
@@ -98,6 +98,7 @@ class RewardControllerTest {
         MethodArgumentTypeMismatchException ex =
                 new MethodArgumentTypeMismatchException("abc", Integer.class, "id", null, new IllegalArgumentException());
         var response = handler.handleTypeMismatch(ex);
-        assertEquals(400, response.getStatusCodeValue());
+        assertEquals(400, response.getStatusCode().value());
     }
+
 }
