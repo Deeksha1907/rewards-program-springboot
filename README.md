@@ -17,13 +17,6 @@ This project calculates reward points for retail customers based on their transa
 - JUnit 5
 - Maven 3.8+
 
- ## Run
-mvn spring-boot:run
-
-## Build
-```bash
-mvn clean install
-
 
 **## Endpoints**
 
@@ -90,4 +83,9 @@ INSERT INTO transaction (customer_id, amount, transaction_date) VALUES
 (2, 130.00, '2025-07-18 17:00:00'),
 (2, 95.00,  '2025-08-25 19:30:00');
 
+ ## Run
+mvn spring-boot:run
 
+## Build
+```bash
+mvn clean install
