@@ -1,14 +1,12 @@
 package com.example.rewards.controller;
 
-import com.example.rewards.dto.MonthlyRewardDTO;
 import com.example.rewards.dto.RewardResponseDTO;
 import com.example.rewards.service.RewardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller exposing rewards endpoints.
@@ -49,10 +47,12 @@ public class RewardController {
      * @return list of MonthlyRewardDTO
      */
     @GetMapping("/customer/{id}/monthly")
-    public List<MonthlyRewardDTO> getMonthlyRewardsForCustomer(
+    public Map<String, Object> getMonthlyRewardsForCustomer(
             @PathVariable Long id,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+
         return rewardService.getMonthlyRewards(id, start, end);
     }
+
 }

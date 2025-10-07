@@ -73,16 +73,15 @@ public class RewardService {
     }
 
     /**
-     * Return reward points grouped by year + month for the customer in the given date range.
+     * Returns a combined structure with customer details, transactions, monthly reward points,
+     * and total points for the given date range.
      *
      * @param customerId customer id
      * @param start inclusive start date
      * @param end inclusive end date
-     * @return list of MonthlyRewardDTO
-     * @throws InvalidDateRangeException if start is after end
-     * @throws ResourceNotFoundException if customer not found
+     * @return a map representing the full response (customer, transactions, monthly, total)
      */
-    public List<MonthlyRewardDTO> getMonthlyRewards(Long customerId, LocalDate start, LocalDate end) {
+    public Map<String, Object> getMonthlyRewards(Long customerId, LocalDate start, LocalDate end) {
         validateDateRange(start, end);
 
         Customer customer = customerRepository.findById(customerId)
@@ -94,24 +93,44 @@ public class RewardService {
         List<Transaction> transactions =
                 transactionRepository.findByCustomerIdAndTransactionDateBetween(customerId, s, e);
 
-        // Use YearMonth to combine year + month
-        Map<YearMonth, Integer> monthlyPoints = new LinkedHashMap<>();
+        // Build transaction DTO list
+        List<TransactionDTO> transactionDTOs = transactions.stream()
+                .map(t -> new TransactionDTO(
+                        t.getAmount(),
+                        t.getTransactionDate(),
+                        com.example.rewards.util.RewardPointsCalculator.calculatePoints(t.getAmount())))
+                .collect(Collectors.toList());
 
+        // Calculate total points
+        int totalPoints = transactionDTOs.stream()
+                .mapToInt(TransactionDTO::getPointsEarned)
+                .sum();
+
+        // Build monthly breakdown (using existing MonthlyRewardDTO)
+        Map<YearMonth, Integer> monthlyMap = new LinkedHashMap<>();
         for (Transaction t : transactions) {
-            YearMonth ym = YearMonth.from(t.getTransactionDate().toLocalDate());
-            int points = RewardPointsCalculator.calculatePoints(t.getAmount());
-            monthlyPoints.put(ym, monthlyPoints.getOrDefault(ym, 0) + points);
+            YearMonth ym = YearMonth.from(t.getTransactionDate());
+            int pts = com.example.rewards.util.RewardPointsCalculator.calculatePoints(t.getAmount());
+            monthlyMap.put(ym, monthlyMap.getOrDefault(ym, 0) + pts);
         }
 
-        // Convert map entries to DTOs (sorted by YearMonth ascending)
-        return monthlyPoints.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(entry -> {
-                    YearMonth ym = entry.getKey();
-                    String monthName = ym.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-                    return new MonthlyRewardDTO(ym.getYear(), monthName, entry.getValue());
-                })
+        List<MonthlyRewardDTO> monthlyRewards = monthlyMap.entrySet().stream()
+                .map(entry -> new MonthlyRewardDTO(
+                        entry.getKey().getYear(),
+                        entry.getKey().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                        entry.getValue()))
                 .collect(Collectors.toList());
+
+        // Construct final response map
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("customerName", customer.getFirstName() + " " + customer.getLastName());
+        response.put("email", customer.getEmail());
+        response.put("period", start + " to " + end);
+        response.put("totalPoints", totalPoints);
+        response.put("transactions", transactionDTOs);
+        response.put("monthlyRewards", monthlyRewards);
+
+        return response;
     }
 
     /**
