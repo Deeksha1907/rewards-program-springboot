@@ -32,7 +32,7 @@ This project implements a simple rewards program REST API:
 
 {
   "customerName": "John Doe",
-  "email": "john.doe@example.com",
+  "email": "john@example.com",
   "totalPoints": 360,
   "period": "2025-06-01 to 2025-08-31",
   "transactions": [
@@ -40,9 +40,20 @@ This project implements a simple rewards program REST API:
       "amount": 120.00,
       "transactionDate": "2025-06-15T10:30:00",
       "pointsEarned": 90
+    },
+    {
+      "amount": 180.00,
+      "transactionDate": "2025-07-10T09:00:00",
+      "pointsEarned": 210
+    },
+    {
+      "amount": 60.00,
+      "transactionDate": "2025-08-05T16:45:00",
+      "pointsEarned": 10
     }
   ]
 }
+
 
 
 
@@ -53,10 +64,35 @@ This project implements a simple rewards program REST API:
 
 **Response:**
 
-[
-  { "year": 2025, "month": "June", "points": 120 },
-  { "year": 2025, "month": "July", "points": 30 }
-]
+{
+  "customerName": "John Doe",
+  "email": "john@example.com",
+  "period": "2025-06-01 to 2025-08-31",
+  "totalPoints": 360,
+  "transactions": [
+    {
+      "amount": 120.00,
+      "transactionDate": "2025-06-15T10:30:00",
+      "pointsEarned": 90
+    },
+    {
+      "amount": 180.00,
+      "transactionDate": "2025-07-10T09:00:00",
+      "pointsEarned": 210
+    },
+    {
+      "amount": 60.00,
+      "transactionDate": "2025-08-05T16:45:00",
+      "pointsEarned": 10
+    }
+  ],
+  "monthlyRewards": [
+    { "year": 2025, "month": "June", "points": 90 },
+    { "year": 2025, "month": "July", "points": 210 },
+    { "year": 2025, "month": "August", "points": 60 }
+  ]
+}
+
 
 **All error responses follow the shape:**
 {
